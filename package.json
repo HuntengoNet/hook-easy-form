@@ -1,12 +1,12 @@
 {
-  "name": "npm-pack-builder",
-  "version": "1.1.8",
+  "name": "hook-easy-form",
+  "version": "1.0.0",
   "main": "build/index.umd.js",
   "types": "build/index.d.ts",
-  "homepage": "https://github.com/EntonyStark/ts-template#readme",
+  "homepage": "https://github.com/hook-easy-form/hook-easy-form.git#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EntonyStark/ts-template.git"
+    "url": "git+https://github.com/hook-easy-form/hook-easy-form.git"
   },
   "files": [
     "build"
@@ -19,12 +19,15 @@
     "clean": "rimraf dist/* && rimraf build/*",
     "dev": "nodemon --watch src -e ts, --exec npm run dev:start",
     "dev:start": "npm run build && npm run start",
-    "start": "node ."
+    "start": "node .",
+    "prettier:ts": "prettier --write './src/**/*.ts' --config ./.prettierrc",
+    "prettier:tsx": "prettier --write './src/**/*.tsx' --config ./.prettierrc"
   },
   "keywords": [
-    "npm",
-    "jest",
-    "typescript"
+    "react",
+    "hooks",
+    "typescript",
+    "form"
   ],
   "author": "EntonyStark",
   "license": "MIT",
@@ -64,9 +67,12 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
-      "prettier --single-quote --semi --trailing-comma all --write"
-    ]
+      "npm run prettier:ts"
+    ],
+    "./src/**/*.tsx": [
+			"npm run prettier:tsx"
+		]
   },
   "dependencies": {},
-  "description": "Template package for build any npm packages"
+  "description": "Easy manager for forms in react"
 }
