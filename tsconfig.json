@@ -4,6 +4,7 @@
 		"strict": true,
 		"sourceMap": true,
 		"declaration": true,
+		"declarationDir": "declaration",
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "node",

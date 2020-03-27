@@ -7,13 +7,13 @@ export default {
 	output: {
 		file: pj.main,
 		format: 'umd',
-		name: 'MyModule',
+		name: 'MyEasyForm',
 		sourcemap: true,
 		globals: {
-			test: pj.main
+			react: 'React',
 		}
 	},
 	plugins: [
-		sourceMap()
+		sourceMap(),
 	]
 }

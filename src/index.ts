@@ -1,5 +1,3 @@
-import { isBoolean } from './utils/isBoolean';
+import { useEasyForm } from './lib/useEasyForm';
 
-export default {
-  isBoolean,
-};
+export default useEasyForm;
