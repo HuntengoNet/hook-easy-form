@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 
+import { validator } from './utils/validator';
+import { transformArrayToObject } from './utils/transformArrayToObject';
+import { hasAnyErrorsInForm } from './utils/hasErrors';
+import { getOutputObject } from './utils/getOutputObject';
+
 import {
   EasyFormTypes,
   FormArray,
@@ -15,22 +20,15 @@ export const useEasyForm = ({
   const [formArray, setFormArray] = useState<FormArray>(initialForm);
   const [formObject, setFormObject] = useState<FormObject>({});
 
-  const transformArrayToObject = (array: FormArray) =>
-    setFormObject(
-      array.reduce((acc, item) => ({ ...acc, [item.name]: item }), {}),
-    );
-
   // transform when init form
-  useEffect(
-    useCallback(() => transformArrayToObject(initialForm), [initialForm]),
-    [initialForm],
-  );
+  useEffect(() => {
+    setFormObject(transformArrayToObject(initialForm));
+  }, [initialForm]);
 
   // transform each time when some property was updated
-  useEffect(
-    useCallback(() => transformArrayToObject(formArray), [formArray]),
-    [formArray],
-  );
+  useEffect(() => {
+    setFormObject(transformArrayToObject(formArray));
+  }, [formArray]);
 
   const resetEvent = () => {
     setFormArray(
@@ -50,7 +48,36 @@ export const useEasyForm = ({
               ...el,
               value: type === 'checkbox' ? checked : value,
               touched: true,
-              // error: validator(el.validate, value),
+              error: validator(value, el.validate),
+            }
+          : el,
+      ),
+    );
+  };
+
+  const setErrorManually = (name: string, error: string) => {
+    setFormArray(
+      formArray.map((el) =>
+        el.name === name
+          ? {
+              ...el,
+              touched: true,
+              error,
+            }
+          : el,
+      ),
+    );
+  };
+
+  const setValueManually = (name: string, value: any) => {
+    setFormArray(
+      formArray.map((el) =>
+        el.name === name
+          ? {
+              ...el,
+              touched: true,
+              value,
+              error: validator(value, el.validate),
             }
           : el,
       ),
@@ -61,11 +88,10 @@ export const useEasyForm = ({
     (callback: OnSubmit<OutputData>) => async (
       e?: React.BaseSyntheticEvent,
     ): Promise<void> => {
-      const data = formArray.reduce(
-        (acc, elem) => ({ ...acc, [elem.name]: elem.value }),
-        {},
-      );
+      const [hasAnyErrorInForm, newForm] = hasAnyErrorsInForm(formArray);
+      if (hasAnyErrorInForm) return setFormArray(newForm);
 
+      const data = getOutputObject(formArray);
       await callback(data, e);
       if (resetAfterSubmit) resetEvent();
     },
@@ -77,6 +103,8 @@ export const useEasyForm = ({
     formObject,
     resetEvent,
     updateEvent,
+    setErrorManually,
+    setValueManually,
     submitEvent,
   };
 };

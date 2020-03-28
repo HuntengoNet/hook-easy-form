@@ -1,17 +1,14 @@
-type RULES = { [key in string]?: (v: string) => string };
+export type RULES = { [key in string]?: (v: string) => string };
 
 export type OutputData = { [Key in string]: string };
 
 export type Item = {
   name: string;
   value: any;
-  type?: string;
-  placeholder?: string;
-  label?: string;
+  options?: { [Key in string]: string };
   error?: string;
   touched?: boolean;
   validate?: RULES;
-  options?: any;
 };
 
 export type FormArray = Item[];
