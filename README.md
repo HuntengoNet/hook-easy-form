@@ -39,7 +39,7 @@ const form = [
 ]
 
 const FormComponent = () => {
-	const {	formArray, updateEvent, resetEvent, submitEvent } = easyHook({ initialForm: form, });
+	const { formArray, updateEvent, resetEvent, submitEvent } = easyHook({ initialForm: form, });
 
 	return <div>
 		{formArray.map(el => <input
@@ -69,7 +69,7 @@ const form = [
 			type: 'text',
 		},
 		validate: {
-			required: v => v.trim() === '' ? 'required' : '',
+			required: v => v.trim() === '' ? 'Required' : '',
 		}
 	},
 	{
@@ -79,7 +79,7 @@ const form = [
 			type: 'text',
 		}
 		validate: {
-			required: v => v.trim() === '' ? 'required' : '',
+			required: v => v.trim() === '' ? 'Required' : '',
 		}
 	},
 	{
@@ -89,14 +89,14 @@ const form = [
 			type: 'number',
 		}
 		validate: {
-			required: v => v.trim() === '' ? 'required' : '',
+			required: v => v.trim() === '' ? 'Required' : '',
 			availableAge: v => v > 0 && v < 100 ? '' : 'Invalid'
 		}
 	},
 ]
 
 const FormComponent = () => {
-	const {	formArray, updateEvent, resetEvent, submitEvent } = easyHook({ initialForm: form });
+	const { formArray, updateEvent, resetEvent, submitEvent } = easyHook({ initialForm: form });
 
 	return <div>
 		{formArray.map(el => <div>

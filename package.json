@@ -1,6 +1,6 @@
 {
   "name": "hook-easy-form",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "build/index.umd.js",
   "types": "build/declaration/index.d.ts",
   "homepage": "https://github.com/hook-easy-form/hook-easy-form.git#readme",
@@ -32,6 +32,7 @@
   "author": "EntonyStark",
   "license": "MIT",
   "devDependencies": {
+    "@testing-library/react-hooks": "^3.2.1",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.3",
     "@types/react": "^16.9.26",
@@ -43,6 +44,7 @@
     "prettier": "^2.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-test-renderer": "^16.13.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.2.0",
     "rollup-plugin-sourcemaps": "^0.5.0",

@@ -1,6 +1,6 @@
 import { RULES } from '../types';
 
-export const validator = (value: string, rules?: RULES): string => {
+export const validator = (value: any, rules?: RULES): string => {
   if (!rules) return '';
   return Object.keys(rules).reduce((acc, item) => {
     if (acc) return acc;
