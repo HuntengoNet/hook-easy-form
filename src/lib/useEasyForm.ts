@@ -83,26 +83,27 @@ export const useEasyForm = (props?: EasyFormTypes) => {
     );
   };
 
-  const submitEvent = useCallback(
-    (callback: OnSubmit<OutputData>) => async (
-      e?: React.BaseSyntheticEvent,
-    ): Promise<void> => {
-      const hasAnyErrorInForm = hasAnyErrorsInForm(formArray);
-      if (hasAnyErrorInForm)
-        return setFormArray(
-          formArray.map((el) => ({
-            ...el,
-            touched: true,
-            error: validator(el.value, el.validate),
-          })),
-        );
+  const submitEvent = (callback: OnSubmit<OutputData>) => async (
+    e?: React.BaseSyntheticEvent,
+  ): Promise<void> => {
+    if (e) {
+      e.preventDefault();
+      e.persist();
+    }
+    const hasAnyErrorInForm = hasAnyErrorsInForm(formArray);
+    if (hasAnyErrorInForm)
+      return setFormArray(
+        formArray.map((el) => ({
+          ...el,
+          touched: true,
+          error: validator(el.value, el.validate),
+        })),
+      );
 
-      const data = getOutputObject(formArray);
-      await callback(data, e);
-      if (props && props.resetAfterSubmit) resetEvent();
-    },
-    [formArray],
-  );
+    const data = getOutputObject(formArray);
+    await callback(data, e);
+    if (props && props.resetAfterSubmit) resetEvent();
+  };
 
   return {
     formArray,
