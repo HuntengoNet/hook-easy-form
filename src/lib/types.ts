@@ -5,7 +5,7 @@ export type OutputData = { [Key in string]: string };
 export type Item = {
   name: string;
   value: any;
-  options?: { [Key in string]: string };
+  options?: { [Key in string]: any };
   error?: string;
   touched?: boolean;
   validate?: RULES;
