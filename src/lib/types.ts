@@ -1,7 +1,5 @@
 export type RULES = { [key in string]?: (v: any) => string };
 
-export type OutputData = { [Key in string]: string };
-
 export type Item = {
   name: string;
   value: any;

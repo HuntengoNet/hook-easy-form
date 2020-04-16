@@ -4,18 +4,14 @@ import { validator } from './utils/validator';
 import { transformArrayToObject } from './utils/transformArrayToObject';
 import { hasAnyErrorsInForm } from './utils/hasErrors';
 import { getOutputObject } from './utils/getOutputObject';
+import { compareValues } from './utils/compareValuesInArrays';
 
-import {
-  EasyFormTypes,
-  FormArray,
-  FormObject,
-  OnSubmit,
-  OutputData,
-} from './types';
+import { EasyFormTypes, FormArray, FormObject, OnSubmit } from './types';
 
 export const useEasyForm = (props?: EasyFormTypes) => {
   const [formArray, setFormArray] = useState<FormArray>([]);
   const [formObject, setFormObject] = useState<FormObject>({});
+  const [pristine, setPristine] = useState<boolean>(true);
 
   // initialize
   useEffect(() => {
@@ -26,6 +22,11 @@ export const useEasyForm = (props?: EasyFormTypes) => {
   // transform each time when some property was updated
   useEffect(() => {
     setFormObject(transformArrayToObject(formArray));
+    const isSame = compareValues(
+      props && Array.isArray(props.initialForm) ? props.initialForm : [],
+      formArray,
+    );
+    setPristine(isSame);
   }, [formArray]);
 
   const resetEvent = () => {
@@ -83,7 +84,7 @@ export const useEasyForm = (props?: EasyFormTypes) => {
     );
   };
 
-  const submitEvent = (callback: OnSubmit<OutputData>) => async (
+  const submitEvent = (callback: OnSubmit<any>) => async (
     e?: React.BaseSyntheticEvent,
   ): Promise<void> => {
     if (e) {
@@ -113,5 +114,6 @@ export const useEasyForm = (props?: EasyFormTypes) => {
     setErrorManually: useCallback(setErrorManually, [formArray]),
     setValueManually: useCallback(setValueManually, [formArray]),
     submitEvent,
+    pristine,
   };
 };
