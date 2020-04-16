@@ -97,7 +97,7 @@ export const useEasyForm = (props?: EasyFormTypes) => {
         formArray.map((el) => ({
           ...el,
           touched: true,
-          error: validator(el.value, el.validate),
+          error: el.error ? el.error : validator(el.value, el.validate),
         })),
       );
 
