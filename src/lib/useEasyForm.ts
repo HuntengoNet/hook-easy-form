@@ -5,35 +5,49 @@ import { transformArrayToObject } from './utils/transformArrayToObject';
 import { hasAnyErrorsInForm } from './utils/hasErrors';
 import { getOutputObject } from './utils/getOutputObject';
 import { compareValues } from './utils/compareValuesInArrays';
+import { setDefaultValues } from './utils/setDefaultValuesToArray';
 
 import { EasyFormTypes, FormArray, FormObject, OnSubmit } from './types';
 
+const VALID_DEFAULT_OBJECT = {
+  formArray: [],
+  formObject: {},
+  resetEvent: () => {},
+  updateEvent: () => {},
+  setErrorManually: () => {},
+  setValueManually: () => {},
+  submitEvent: () => {},
+  pristine: true,
+};
+
 export const useEasyForm = (props?: EasyFormTypes) => {
+  if (!props) return VALID_DEFAULT_OBJECT;
+  const { defaultValues, initialForm, resetAfterSubmit } = props;
   const [formArray, setFormArray] = useState<FormArray>([]);
   const [formObject, setFormObject] = useState<FormObject>({});
   const [pristine, setPristine] = useState<boolean>(true);
 
   // initialize
   useEffect(() => {
-    if (!props || props.initialForm.length === 0) return setFormArray([]);
-    setFormArray(props.initialForm);
-  }, []);
+    if (initialForm.length === 0) return setFormArray([]); // empty array case
+    return setFormArray(setDefaultValues(initialForm, defaultValues)); // common case
+  }, [initialForm, defaultValues]);
 
   // transform each time when some property was updated
   useEffect(() => {
     setFormObject(transformArrayToObject(formArray));
     const isSame = compareValues(
-      props && Array.isArray(props.initialForm) ? props.initialForm : [],
+      Array.isArray(initialForm)
+        ? setDefaultValues(initialForm, defaultValues)
+        : [],
       formArray,
     );
     setPristine(isSame);
   }, [formArray]);
 
   const resetEvent = () => {
-    if (!props || !Array.isArray(props.initialForm)) return;
-    setFormArray(
-      props.initialForm.map((el) => ({ ...el, value: '', touched: false })),
-    );
+    if (!Array.isArray(initialForm)) return;
+    setFormArray(setDefaultValues(initialForm, defaultValues));
   };
 
   const updateEvent = (e?: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,13 +117,13 @@ export const useEasyForm = (props?: EasyFormTypes) => {
 
     const data = getOutputObject(formArray);
     await callback(data, e);
-    if (props && props.resetAfterSubmit) resetEvent();
+    if (resetAfterSubmit) resetEvent();
   };
 
   return {
     formArray,
     formObject,
-    resetEvent: useCallback(resetEvent, []),
+    resetEvent: useCallback(resetEvent, [defaultValues]),
     updateEvent: useCallback(updateEvent, [formArray]),
     setErrorManually: useCallback(setErrorManually, [formArray]),
     setValueManually: useCallback(setValueManually, [formArray]),
