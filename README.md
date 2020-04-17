@@ -205,6 +205,7 @@ const FormComponent = () => {
 
 
 * __defaultValues__ 
+
 | Name | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | resetAfterSubmit | `object` | false | false | The values with which to initialize your form |
