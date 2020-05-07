@@ -7,7 +7,13 @@ import { getOutputObject } from './utils/getOutputObject';
 import { compareValues } from './utils/compareValuesInArrays';
 import { setDefaultValues } from './utils/setDefaultValuesToArray';
 
-import { EasyFormTypes, FormArray, FormObject, OnSubmit } from './types';
+import {
+  EasyFormTypes,
+  FormArray,
+  FormObject,
+  OnSubmit,
+  DefaultValues,
+} from './types';
 
 export const useEasyForm = (props?: EasyFormTypes) => {
   if (!props || Object.keys(props).length === 0) {
@@ -19,6 +25,7 @@ export const useEasyForm = (props?: EasyFormTypes) => {
       updateEvent: useCallback((e?: any) => {}, []),
       setErrorManually: useCallback((name?: string, error?: string) => {}, []),
       setValueManually: useCallback((name?: string, value?: any) => {}, []),
+      updateDefaultValues: useCallback(({}) => {}, []),
       submitEvent: (callback: OnSubmit<any>) => async (
         e?: React.BaseSyntheticEvent,
       ): Promise<void> => {},
@@ -30,6 +37,7 @@ export const useEasyForm = (props?: EasyFormTypes) => {
   const [formArray, setFormArray] = useState<FormArray>(
     setDefaultValues(initialForm, defaultValues),
   );
+  const [df, setDf] = useState<DefaultValues | undefined>(defaultValues);
   const [formObject, setFormObject] = useState<FormObject>({});
   const [pristine, setPristine] = useState<boolean>(true);
 
@@ -37,9 +45,7 @@ export const useEasyForm = (props?: EasyFormTypes) => {
   useEffect(() => {
     setFormObject(transformArrayToObject(formArray));
     const isSame = compareValues(
-      Array.isArray(initialForm)
-        ? setDefaultValues(initialForm, defaultValues)
-        : [],
+      Array.isArray(initialForm) ? setDefaultValues(initialForm, df) : [],
       formArray,
     );
     setPristine(isSame);
@@ -47,7 +53,13 @@ export const useEasyForm = (props?: EasyFormTypes) => {
 
   const resetEvent = () => {
     if (!Array.isArray(initialForm)) return;
-    setFormArray(setDefaultValues(initialForm, defaultValues));
+    setFormArray(setDefaultValues(initialForm, df));
+  };
+
+  const updateDefaultValues = (v: DefaultValues) => {
+    if (!v || Object.keys(v).length === 0) return;
+    setDf(v);
+    setFormArray(setDefaultValues(initialForm, v));
   };
 
   const updateEvent = (e?: any) => {
@@ -123,10 +135,11 @@ export const useEasyForm = (props?: EasyFormTypes) => {
   return {
     formArray,
     formObject,
-    resetEvent: useCallback(resetEvent, [defaultValues]),
+    resetEvent: useCallback(resetEvent, [df]),
     updateEvent: useCallback(updateEvent, [formArray]),
     setErrorManually: useCallback(setErrorManually, [formArray]),
     setValueManually: useCallback(setValueManually, [formArray]),
+    updateDefaultValues: useCallback(updateDefaultValues, [formArray]),
     submitEvent,
     pristine,
   };
