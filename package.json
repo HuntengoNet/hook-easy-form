@@ -1,6 +1,6 @@
 {
   "name": "hook-easy-form",
-  "version": "1.4.1",
+  "version": "2.0.2",
   "main": "build/index.umd.js",
   "types": "build/declaration/index.d.ts",
   "homepage": "https://github.com/hook-easy-form/hook-easy-form.git#readme",
@@ -15,6 +15,7 @@
 		"test:clear": "jest --clearCache",
     "test": "jest",
     "test:watch": "npm run test -- --watchAll",
+    "test:one": "npm run test --",
     "build": "npm run clean && tsc -p tsconfig.json && rollup -c rollup.config.js",
     "postbuild": "cp -R declaration build/",
     "clean": "rimraf dist/* && rimraf build/*",

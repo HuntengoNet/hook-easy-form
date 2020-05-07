@@ -25,203 +25,212 @@ describe('useEasyForm()', () => {
     expect(result.current.formObject).toEqual(mockObject);
   });
 
-  // it('render without any params', () => {
-  //   const { result } = renderHook(() => useEasyForm());
+  it('render without any params', () => {
+    const { result } = renderHook(() => useEasyForm());
 
-  //   expect(result.current.formArray).toEqual([]);
-  //   expect(result.current.formObject).toEqual({});
-  // });
+    expect(result.current.formArray).toEqual([]);
+    expect(result.current.formObject).toEqual({});
+  });
 
-  // it('render with empty form data', () => {
-  //   const { result } = renderHook(() => useEasyForm({ initialForm: [] }));
+  it('render with empty object', () => {
+    const { result } = renderHook(() => useEasyForm({} as any));
 
-  //   expect(result.current.formArray).toEqual([]);
-  //   expect(result.current.formObject).toEqual({});
-  // });
+    expect(result.current.formArray).toEqual([]);
+    expect(result.current.formObject).toEqual({});
+  });
 
-  // it('submitEvent simple case', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray }),
-  //   );
+  it('render with empty form data', () => {
+    const { result } = renderHook(() => useEasyForm({ initialForm: [] }));
 
-  //   const f = jest.fn(() => {});
-  //   act(() => {
-  //     result.current.submitEvent(f);
-  //   });
+    expect(result.current.formArray).toEqual([]);
+    expect(result.current.formObject).toEqual({});
+  });
 
-  //   expect(result.current.formArray).toEqual(mockArray);
-  //   expect(result.current.formObject).toEqual(mockObject);
-  // });
+  it('submitEvent simple case', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray }),
+    );
 
-  // it('render with default props', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray, defaultValues: { FN: 'Tony' } }),
-  //   );
+    const f = jest.fn(() => {});
+    act(() => {
+      result.current.submitEvent(f);
+    });
 
-  //   expect(result.current.formArray).toEqual([{ name: 'FN', value: 'Tony' }]);
-  //   expect(result.current.formObject).toEqual({ FN: { name: 'FN', value: 'Tony' } });
-  // });
+    expect(result.current.formArray).toEqual(mockArray);
+    expect(result.current.formObject).toEqual(mockObject);
+  });
 
-  // it('reset func simple case', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray }),
-  //   );
+  it('render with default props', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray, defaultValues: { FN: 'Tony' } }),
+    );
 
-  //   act(() => {
-  //     result.current.resetEvent();
-  //   });
+    expect(result.current.formArray).toEqual([{ name: 'FN', value: 'Tony' }]);
+    expect(result.current.formObject).toEqual({
+      FN: { name: 'FN', value: 'Tony' },
+    });
+  });
 
-  //   expect(result.current.formArray).toEqual(mockArray);
-  //   expect(result.current.formObject).toEqual(mockObject);
-  // });
+  it('reset func simple case', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray }),
+    );
 
-  // it('reset func with wrong form data', () => {
-  //   const { result } = renderHook(() => useEasyForm({ initialForm: [] }));
+    act(() => {
+      result.current.resetEvent();
+    });
 
-  //   act(() => {
-  //     result.current.resetEvent();
-  //   });
+    expect(result.current.formArray).toEqual(mockArray);
+    expect(result.current.formObject).toEqual(mockObject);
+  });
 
-  //   expect(result.current.formArray).toEqual([]);
-  //   expect(result.current.formObject).toEqual({});
-  // });
+  it('reset func with wrong form data', () => {
+    const { result } = renderHook(() => useEasyForm({ initialForm: [] }));
 
-  // it('updateEvent func simple case', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray }),
-  //   );
+    act(() => {
+      result.current.resetEvent();
+    });
 
-  //   act(() => {
-  //     const params = {
-  //       target: {
-  //         type: 'text',
-  //         value: 'Tony',
-  //         name: 'FN',
-  //       },
-  //     } as React.ChangeEvent<HTMLInputElement>;
-  //     result.current.updateEvent(params);
-  //   });
+    expect(result.current.formArray).toEqual([]);
+    expect(result.current.formObject).toEqual({});
+  });
 
-  //   const array = [
-  //     {
-  //       name: 'FN',
-  //       value: 'Tony',
-  //       touched: true,
-  //       error: '',
-  //     },
-  //   ];
+  it('updateEvent func simple case', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray }),
+    );
 
-  //   const object = {
-  //     FN: {
-  //       name: 'FN',
-  //       value: 'Tony',
-  //       touched: true,
-  //       error: '',
-  //     },
-  //   };
+    act(() => {
+      const params = {
+        target: {
+          type: 'text',
+          value: 'Tony',
+          name: 'FN',
+        },
+      } as React.ChangeEvent<HTMLInputElement>;
+      result.current.updateEvent(params);
+    });
 
-  //   expect(result.current.formArray).toEqual(array);
-  //   expect(result.current.formObject).toEqual(object);
-  // });
+    const array = [
+      {
+        name: 'FN',
+        value: 'Tony',
+        touched: true,
+        error: '',
+      },
+    ];
 
-  // it('updateEvent func with without params', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray }),
-  //   );
+    const object = {
+      FN: {
+        name: 'FN',
+        value: 'Tony',
+        touched: true,
+        error: '',
+      },
+    };
 
-  //   act(() => {
-  //     result.current.updateEvent();
-  //   });
+    expect(result.current.formArray).toEqual(array);
+    expect(result.current.formObject).toEqual(object);
+  });
 
-  //   expect(result.current.formArray).toEqual(mockArray);
-  //   expect(result.current.formObject).toEqual(mockObject);
-  // });
+  it('updateEvent func with without params', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray }),
+    );
 
-  // it('setErrorManually func simple case', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray }),
-  //   );
+    act(() => {
+      result.current.updateEvent();
+    });
 
-  //   act(() => {
-  //     result.current.setErrorManually('FN', 'Incorrect');
-  //   });
+    expect(result.current.formArray).toEqual(mockArray);
+    expect(result.current.formObject).toEqual(mockObject);
+  });
 
-  //   const array = [
-  //     {
-  //       name: 'FN',
-  //       value: 'John',
-  //       touched: true,
-  //       error: 'Incorrect',
-  //     },
-  //   ];
+  it('setErrorManually func simple case', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray }),
+    );
 
-  //   const object = {
-  //     FN: {
-  //       name: 'FN',
-  //       value: 'John',
-  //       touched: true,
-  //       error: 'Incorrect',
-  //     },
-  //   };
+    act(() => {
+      result.current.setErrorManually('FN', 'Incorrect');
+    });
 
-  //   expect(result.current.formArray).toEqual(array);
-  //   expect(result.current.formObject).toEqual(object);
-  // });
+    const array = [
+      {
+        name: 'FN',
+        value: 'John',
+        touched: true,
+        error: 'Incorrect',
+      },
+    ];
 
-  // it('setErrorManually func without params', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray }),
-  //   );
+    const object = {
+      FN: {
+        name: 'FN',
+        value: 'John',
+        touched: true,
+        error: 'Incorrect',
+      },
+    };
 
-  //   act(() => {
-  //     result.current.setErrorManually();
-  //   });
+    expect(result.current.formArray).toEqual(array);
+    expect(result.current.formObject).toEqual(object);
+  });
 
-  //   expect(result.current.formArray).toEqual(mockArray);
-  //   expect(result.current.formObject).toEqual(mockObject);
-  // });
+  it('setErrorManually func without params', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray }),
+    );
 
-  // it('setValueManually func simple case', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray }),
-  //   );
+    act(() => {
+      result.current.setErrorManually();
+    });
 
-  //   act(() => {
-  //     result.current.setValueManually('FN', 'Tony');
-  //   });
+    expect(result.current.formArray).toEqual(mockArray);
+    expect(result.current.formObject).toEqual(mockObject);
+  });
 
-  //   const array = [
-  //     {
-  //       name: 'FN',
-  //       value: 'Tony',
-  //       touched: true,
-  //       error: '',
-  //     },
-  //   ];
+  it('setValueManually func simple case', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray }),
+    );
 
-  //   const object = {
-  //     FN: {
-  //       name: 'FN',
-  //       value: 'Tony',
-  //       touched: true,
-  //       error: '',
-  //     },
-  //   };
+    act(() => {
+      result.current.setValueManually('FN', 'Tony');
+    });
 
-  //   expect(result.current.formArray).toEqual(array);
-  //   expect(result.current.formObject).toEqual(object);
-  // });
+    const array = [
+      {
+        name: 'FN',
+        value: 'Tony',
+        touched: true,
+        error: '',
+      },
+    ];
 
-  // it('setValueManually func without params', () => {
-  //   const { result } = renderHook(() =>
-  //     useEasyForm({ initialForm: mockArray }),
-  //   );
+    const object = {
+      FN: {
+        name: 'FN',
+        value: 'Tony',
+        touched: true,
+        error: '',
+      },
+    };
 
-  //   act(() => {
-  //     result.current.setValueManually();
-  //   });
+    expect(result.current.formArray).toEqual(array);
+    expect(result.current.formObject).toEqual(object);
+  });
 
-  //   expect(result.current.formArray).toEqual(mockArray);
-  //   expect(result.current.formObject).toEqual(mockObject);
-  // });
+  it('setValueManually func without params', () => {
+    const { result } = renderHook(() =>
+      useEasyForm({ initialForm: mockArray }),
+    );
+
+    act(() => {
+      result.current.setValueManually();
+    });
+
+    expect(result.current.formArray).toEqual(mockArray);
+    expect(result.current.formObject).toEqual(mockObject);
+  });
 });

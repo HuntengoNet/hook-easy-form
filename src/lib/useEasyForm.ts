@@ -9,29 +9,29 @@ import { setDefaultValues } from './utils/setDefaultValuesToArray';
 
 import { EasyFormTypes, FormArray, FormObject, OnSubmit } from './types';
 
-const VALID_DEFAULT_OBJECT = {
-  formArray: [],
-  formObject: {},
-  resetEvent: () => {},
-  updateEvent: () => {},
-  setErrorManually: () => {},
-  setValueManually: () => {},
-  submitEvent: () => {},
-  pristine: true,
-};
-
 export const useEasyForm = (props?: EasyFormTypes) => {
-  if (!props) return VALID_DEFAULT_OBJECT;
+  if (!props || Object.keys(props).length === 0) {
+    console.warn('Need pass initialForm property');
+    return {
+      formArray: [] as FormArray,
+      formObject: {} as FormObject,
+      resetEvent: useCallback(() => {}, []),
+      updateEvent: useCallback((e?: any) => {}, []),
+      setErrorManually: useCallback((name?: string, error?: string) => {}, []),
+      setValueManually: useCallback((name?: string, value?: any) => {}, []),
+      submitEvent: (callback: OnSubmit<any>) => async (
+        e?: React.BaseSyntheticEvent,
+      ): Promise<void> => {},
+      pristine: true,
+    };
+  }
+
   const { defaultValues, initialForm, resetAfterSubmit } = props;
-  const [formArray, setFormArray] = useState<FormArray>([]);
+  const [formArray, setFormArray] = useState<FormArray>(
+    setDefaultValues(initialForm, defaultValues),
+  );
   const [formObject, setFormObject] = useState<FormObject>({});
   const [pristine, setPristine] = useState<boolean>(true);
-
-  // initialize
-  useEffect(() => {
-    if (initialForm.length === 0) return setFormArray([]); // empty array case
-    return setFormArray(setDefaultValues(initialForm, defaultValues)); // common case
-  }, [initialForm, defaultValues]);
 
   // transform each time when some property was updated
   useEffect(() => {
@@ -50,7 +50,7 @@ export const useEasyForm = (props?: EasyFormTypes) => {
     setFormArray(setDefaultValues(initialForm, defaultValues));
   };
 
-  const updateEvent = (e?: React.ChangeEvent<HTMLInputElement>) => {
+  const updateEvent = (e?: any) => {
     if (!e || !e.target) return;
 
     const { value, type, checked, name } = e.target;
