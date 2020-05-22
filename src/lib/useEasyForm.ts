@@ -15,25 +15,11 @@ import {
   DefaultValues,
 } from './types';
 
-export const useEasyForm = (props?: EasyFormTypes) => {
-  if (!props || Object.keys(props).length === 0) {
-    console.warn('Need pass initialForm property');
-    return {
-      formArray: [] as FormArray,
-      formObject: {} as FormObject,
-      resetEvent: useCallback(() => {}, []),
-      updateEvent: useCallback((e?: any) => {}, []),
-      setErrorManually: useCallback((name?: string, error?: string) => {}, []),
-      setValueManually: useCallback((name?: string, value?: any) => {}, []),
-      updateDefaultValues: useCallback(({}) => {}, []),
-      submitEvent: (callback: OnSubmit<any>) => async (
-        e?: React.BaseSyntheticEvent,
-      ): Promise<void> => {},
-      pristine: true,
-    };
-  }
-
-  const { defaultValues, initialForm, resetAfterSubmit } = props;
+export const useEasyForm = ({
+  defaultValues,
+  initialForm,
+  resetAfterSubmit,
+}: EasyFormTypes) => {
   const [formArray, setFormArray] = useState<FormArray>(
     setDefaultValues(initialForm, defaultValues),
   );
@@ -60,6 +46,12 @@ export const useEasyForm = (props?: EasyFormTypes) => {
     if (!v || Object.keys(v).length === 0) return;
     setDf(v);
     setFormArray(setDefaultValues(initialForm, v));
+  };
+
+  const updateFormArray = (array: FormArray, defaultValues?: DefaultValues) => {
+    if (!array || !Array.isArray(array)) return;
+    setDf(defaultValues);
+    setFormArray(setDefaultValues(array, defaultValues));
   };
 
   const updateEvent = (e?: any) => {
@@ -140,6 +132,7 @@ export const useEasyForm = (props?: EasyFormTypes) => {
     setErrorManually: useCallback(setErrorManually, [formArray]),
     setValueManually: useCallback(setValueManually, [formArray]),
     updateDefaultValues: useCallback(updateDefaultValues, [formArray]),
+    updateFormArray: useCallback(updateFormArray, [formArray, df]),
     submitEvent,
     pristine,
   };

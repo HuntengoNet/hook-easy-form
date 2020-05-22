@@ -25,13 +25,6 @@ describe('useEasyForm()', () => {
     expect(result.current.formObject).toEqual(mockObject);
   });
 
-  it('render without any params', () => {
-    const { result } = renderHook(() => useEasyForm());
-
-    expect(result.current.formArray).toEqual([]);
-    expect(result.current.formObject).toEqual({});
-  });
-
   it('render with empty object', () => {
     const { result } = renderHook(() => useEasyForm({} as any));
 
