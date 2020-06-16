@@ -13,15 +13,15 @@ const rules = {
 
 describe('validator()', () => {
   it('should return error = Required', () => {
-    expect(validator('', rules)).toEqual('Required');
+    expect(validator('', {}, rules)).toEqual('Required');
   });
 
   it('should return error = Invalid', () => {
-    expect(validator('1333', rules)).toEqual('Invalid');
+    expect(validator('1333', {}, rules)).toEqual('Invalid');
   });
 
   it('should return no error', () => {
-    expect(validator('12', rules)).toEqual('');
-    expect(validator('12')).toEqual('');
+    expect(validator('12', {}, rules)).toEqual('');
+    expect(validator('12', {})).toEqual('');
   });
 });

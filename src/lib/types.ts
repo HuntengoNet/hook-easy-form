@@ -1,4 +1,5 @@
-export type RULES = { [key in string]?: (v: any) => string };
+export type RULES = { [key in string]?: (v: any, p: OTHER_VALUES) => string };
+export type OTHER_VALUES = { [key in string]: any };
 
 export type Item = {
   name: string;

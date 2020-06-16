@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { validator } from './utils/validator';
 import { transformArrayToObject } from './utils/transformArrayToObject';
 import { hasAnyErrorsInForm } from './utils/hasErrors';
-import { getOutputObject } from './utils/getOutputObject';
+import { getOutputObject, getOtherValues } from './utils/getOutputObject';
 import { compareValues } from './utils/compareValuesInArrays';
 import { setDefaultValues } from './utils/setDefaultValuesToArray';
 
@@ -59,6 +59,7 @@ export const useEasyForm = ({
 
     const { value, type, checked, name } = e.target;
 
+    const otherValues = getOtherValues(formArray, name);
     setFormArray(
       formArray.map((el) =>
         el.name === name
@@ -66,7 +67,7 @@ export const useEasyForm = ({
               ...el,
               value: type === 'checkbox' ? checked : value,
               touched: true,
-              error: validator(value, el.validate),
+              error: validator(value, otherValues, el.validate),
             }
           : el,
       ),
@@ -88,6 +89,7 @@ export const useEasyForm = ({
   };
 
   const setValueManually = (name?: string, value?: any) => {
+    const otherValues = getOtherValues(formArray, name);
     setFormArray(
       formArray.map((el) =>
         el.name === name
@@ -95,7 +97,7 @@ export const useEasyForm = ({
               ...el,
               touched: true,
               value,
-              error: validator(value, el.validate),
+              error: validator(value, otherValues, el.validate),
             }
           : el,
       ),
@@ -109,15 +111,20 @@ export const useEasyForm = ({
       e.preventDefault();
       e.persist();
     }
-    const hasAnyErrorInForm = hasAnyErrorsInForm(formArray);
-    if (hasAnyErrorInForm)
+
+    const otherValues = getOtherValues(formArray);
+    const hasAnyErrorInForm = hasAnyErrorsInForm(formArray, otherValues);
+    if (hasAnyErrorInForm) {
       return setFormArray(
         formArray.map((el) => ({
           ...el,
           touched: true,
-          error: el.error ? el.error : validator(el.value, el.validate),
+          error: el.error
+            ? el.error
+            : validator(el.value, otherValues, el.validate),
         })),
       );
+    }
 
     const data = getOutputObject(formArray);
     await callback(data, e);

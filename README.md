@@ -193,7 +193,7 @@ const FormComponent = () => {
 | value | `any` | undefined | false | Value for this object |
 | error | `string` | ` ` | false | String error |
 | touched | `boolean` | false | false | The value indicates whether it has been changed before |
-| validate | `object of rules` | undefined | false | Object with functions for validate |
+| validate | `object of rules` | undefined | false | Object with functions for validate, function receive two arguments, current value and object with otherValues |
 | options | `object` | undefined | false | Object for rest user properties, it can be - type, placeholder, label, some options etc |
 
 
