@@ -1,4 +1,4 @@
-import { hasAnyErrorsInForm } from '../lib/utils/hasErrors';
+import { hasAnyErrorsInForm, checkFormValid } from '../lib/utils/hasErrors';
 import { OTHER_VALUES } from '../lib/types';
 
 const mockArray = [
@@ -16,15 +16,24 @@ const mockArray = [
   },
 ];
 
-describe('hasAnyErrorsInForm()', () => {
-  it('should return error = true ', () => {
+describe('hasErrors.test.ts', () => {
+  it('hasAnyErrorsInForm() - should return error = true ', () => {
     expect(hasAnyErrorsInForm(mockArray, {})).toEqual(true);
   });
 
-  it('should return error = false', () => {
+  it('hasAnyErrorsInForm() - should return error = false', () => {
     const form = mockArray.map((el) =>
       el.name === 'FN' ? { ...el, value: 'John' } : el,
     );
     expect(hasAnyErrorsInForm(form, {})).toEqual(false);
+  });
+
+  it('checkFormValid() - should return = true ', () => {
+    expect(checkFormValid(mockArray)).toEqual(true);
+  });
+
+  it('checkFormValid() - should return = false ', () => {
+    const arr = mockArray.map((el) => ({ ...el, error: 'some error string' }));
+    expect(checkFormValid(arr)).toEqual(false);
   });
 });

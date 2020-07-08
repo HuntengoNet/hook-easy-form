@@ -12,3 +12,11 @@ export const hasAnyErrorsInForm = (
     return error !== '';
   }, false as boolean);
 };
+
+export const checkFormValid = (f: FormArray): boolean => {
+  return f.reduce((acc, item) => {
+    if (!acc) return acc;
+    if (item.error) return false;
+    return true;
+  }, true as boolean);
+};

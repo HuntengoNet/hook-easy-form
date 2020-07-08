@@ -208,7 +208,7 @@ const FormComponent = () => {
 
 | Name | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| resetAfterSubmit | `object` | false | false | The values with which to initialize your form |
+| defaultValues | `object` | false | false | The values with which to initialize your form |
 
 ## Hook actions API
 
@@ -223,6 +223,7 @@ const FormComponent = () => {
   setErrorManually, // takes a name and error string as a params, and immediately set error for current name
   setValueManually, // takes a name and value as a params, and immediately set value for current name
   pristine, // true when the current form values are the same as the initialValues, false otherwise.
+  valid, // true when the form is valid (has no validation errors), false otherwise.
 ```
 
 ## Contribute

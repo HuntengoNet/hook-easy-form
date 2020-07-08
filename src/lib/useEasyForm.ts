@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 import { validator } from './utils/validator';
 import { transformArrayToObject } from './utils/transformArrayToObject';
-import { hasAnyErrorsInForm } from './utils/hasErrors';
+import { hasAnyErrorsInForm, checkFormValid } from './utils/hasErrors';
 import { getOutputObject, getOtherValues } from './utils/getOutputObject';
 import { compareValues } from './utils/compareValuesInArrays';
 import { setDefaultValues } from './utils/setDefaultValuesToArray';
@@ -26,6 +26,7 @@ export const useEasyForm = ({
   const [df, setDf] = useState<DefaultValues | undefined>(defaultValues);
   const [formObject, setFormObject] = useState<FormObject>({});
   const [pristine, setPristine] = useState<boolean>(true);
+  const [valid, setValid] = useState<boolean>(true);
 
   // transform each time when some property was updated
   useEffect(() => {
@@ -35,6 +36,7 @@ export const useEasyForm = ({
       formArray,
     );
     setPristine(isSame);
+    setValid(checkFormValid(formArray));
   }, [formArray]);
 
   const resetEvent = () => {
@@ -142,5 +144,6 @@ export const useEasyForm = ({
     updateFormArray: useCallback(updateFormArray, [formArray, df]),
     submitEvent,
     pristine,
+    valid,
   };
 };
