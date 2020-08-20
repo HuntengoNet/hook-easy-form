@@ -63,16 +63,18 @@ export const useEasyForm = ({
 
     const otherValues = getOtherValues(formArray, name);
     setFormArray(
-      formArray.map((el) =>
-        el.name === name
-          ? {
-              ...el,
-              value: type === 'checkbox' ? checked : value,
-              touched: true,
-              error: validator(value, otherValues, el.validate),
-            }
-          : el,
-      ),
+      formArray.map((el) => {
+        if (el.name === name) {
+          const v = type === 'checkbox' ? checked : value;
+          return {
+            ...el,
+            value: v,
+            touched: true,
+            error: validator(v, otherValues, el.validate),
+          };
+        }
+        return el;
+      }),
     );
   };
 
