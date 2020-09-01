@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 import { validator } from './utils/validator';
 import { transformArrayToObject } from './utils/transformArrayToObject';
-import { hasAnyErrorsInForm, checkFormValid } from './utils/hasErrors';
+import { hasAnyErrorsInForm } from './utils/hasErrors';
 import { getOutputObject, getOtherValues } from './utils/getOutputObject';
 import { compareValues } from './utils/compareValuesInArrays';
 import { setDefaultValues } from './utils/setDefaultValuesToArray';
@@ -36,7 +36,9 @@ export const useEasyForm = ({
       formArray,
     );
     setPristine(isSame);
-    setValid(checkFormValid(formArray));
+    const otherValues = getOtherValues(formArray);
+    const hasAnyErrorInForm = hasAnyErrorsInForm(formArray, otherValues);
+    setValid(!hasAnyErrorInForm);
   }, [formArray]);
 
   const resetEvent = () => {

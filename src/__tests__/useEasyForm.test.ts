@@ -235,18 +235,6 @@ describe('useEasyForm()', () => {
     expect(result.current.valid).toEqual(true);
   });
 
-  it('valid property should be false', () => {
-    const { result } = renderHook(() =>
-      useEasyForm({ initialForm: mockArray }),
-    );
-
-    act(() => {
-      result.current.setErrorManually('FN', 'some error string');
-    });
-
-    expect(result.current.valid).toEqual(false);
-  });
-
   it('pristine property should be true', () => {
     const { result } = renderHook(() =>
       useEasyForm({ initialForm: mockArray }),
