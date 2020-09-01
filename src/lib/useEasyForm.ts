@@ -93,9 +93,10 @@ export const useEasyForm = ({
   };
 
   const setValueManually = (name?: string, value?: any) => {
-    const otherValues = getOtherValues(formArray, name);
-    setFormArray(
-      formArray.map((el) =>
+    setFormArray((ps) => {
+      const otherValues = getOtherValues(ps, name);
+
+      return ps.map((el) =>
         el.name === name
           ? {
               ...el,
@@ -104,8 +105,8 @@ export const useEasyForm = ({
               error: validator(value, otherValues, el.validate),
             }
           : el,
-      ),
-    );
+      );
+    });
   };
 
   const submitEvent = (callback: OnSubmit<any>) => async (
