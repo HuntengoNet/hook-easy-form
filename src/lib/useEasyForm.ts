@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 import { validator } from './utils/validator';
 import { transformArrayToObject } from './utils/transformArrayToObject';
@@ -7,13 +7,7 @@ import { getOutputObject, getOtherValues } from './utils/getOutputObject';
 import { compareValues } from './utils/compareValuesInArrays';
 import { setDefaultValues } from './utils/setDefaultValuesToArray';
 
-import {
-  EasyFormTypes,
-  FormArray,
-  FormObject,
-  OnSubmit,
-  DefaultValues,
-} from './types';
+import { EasyFormTypes, FormArray, OnSubmit, DefaultValues } from './types';
 
 export const useEasyForm = ({
   defaultValues,
@@ -23,40 +17,34 @@ export const useEasyForm = ({
   const [formArray, setFormArray] = useState<FormArray>(
     setDefaultValues(initialForm, defaultValues),
   );
-  const [df, setDf] = useState<DefaultValues | undefined>(defaultValues);
-  const [formObject, setFormObject] = useState<FormObject>({});
-  const [pristine, setPristine] = useState<boolean>(true);
-  const [valid, setValid] = useState<boolean>(true);
 
-  // transform each time when some property was updated
-  useEffect(() => {
-    setFormObject(transformArrayToObject(formArray));
-    const isSame = compareValues(
-      Array.isArray(initialForm) ? setDefaultValues(initialForm, df) : [],
-      formArray,
-    );
-    setPristine(isSame);
-    const otherValues = getOtherValues(formArray);
-    const hasAnyErrorInForm = hasAnyErrorsInForm(formArray, otherValues);
+  const df = useRef(defaultValues || {});
+  const formObject = transformArrayToObject(formArray);
 
-    setValid(!hasAnyErrorInForm && checkFormValid(formArray));
-  }, [formArray]);
+  const pristine = compareValues(
+    Array.isArray(initialForm) ? setDefaultValues(initialForm, df.current) : [],
+    formArray,
+  );
+
+  const valid =
+    !hasAnyErrorsInForm(formArray, getOtherValues(formArray)) &&
+    checkFormValid(formArray);
 
   const resetEvent = () => {
     if (!Array.isArray(initialForm)) return;
-    setFormArray(setDefaultValues(initialForm, df));
+    setFormArray(setDefaultValues(initialForm, df.current));
   };
 
   const updateDefaultValues = (v: DefaultValues) => {
     if (!v || Object.keys(v).length === 0) return;
-    setDf(v);
+    df.current = v;
     setFormArray(setDefaultValues(initialForm, v));
   };
 
-  const updateFormArray = (array: FormArray, defaultValues?: DefaultValues) => {
+  const updateFormArray = (array: FormArray) => {
     if (!array || !Array.isArray(array)) return;
-    setDf(defaultValues);
-    setFormArray(setDefaultValues(array, defaultValues));
+
+    setFormArray(array);
   };
 
   const updateEvent = (e?: any) => {
@@ -144,12 +132,12 @@ export const useEasyForm = ({
   return {
     formArray,
     formObject,
-    resetEvent: useCallback(resetEvent, [df]),
+    resetEvent: useCallback(resetEvent, [df.current]),
     updateEvent: useCallback(updateEvent, [formArray]),
     setErrorManually: useCallback(setErrorManually, [formArray]),
     setValueManually: useCallback(setValueManually, [formArray]),
     updateDefaultValues: useCallback(updateDefaultValues, [formArray]),
-    updateFormArray: useCallback(updateFormArray, [formArray, df]),
+    updateFormArray: useCallback(updateFormArray, [formArray, df.current]),
     submitEvent,
     pristine,
     valid,
