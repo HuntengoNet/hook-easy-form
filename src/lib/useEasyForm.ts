@@ -7,13 +7,20 @@ import { getOutputObject, getOtherValues } from './utils/getOutputObject';
 import { compareValues } from './utils/compareValuesInArrays';
 import { setDefaultValues } from './utils/setDefaultValuesToArray';
 
-import { EasyFormTypes, FormArray, OnSubmit, DefaultValues } from './types';
+import {
+  EasyFormTypes,
+  FormArray,
+  OnSubmit,
+  DefaultValues,
+  AsyncValidationFunc,
+  HookType,
+} from './types';
 
-export const useEasyForm = ({
+export const useEasyForm = <T>({
   defaultValues,
   initialForm,
   resetAfterSubmit,
-}: EasyFormTypes) => {
+}: EasyFormTypes): HookType<T> => {
   const [formArray, setFormArray] = useState<FormArray>(
     setDefaultValues(initialForm, defaultValues),
   );
@@ -57,6 +64,9 @@ export const useEasyForm = ({
       formArray.map((el) => {
         if (el.name === name) {
           const v = type === 'checkbox' ? checked : value;
+
+          asyncValidation(el, v, otherValues);
+
           return {
             ...el,
             value: v,
@@ -100,9 +110,20 @@ export const useEasyForm = ({
     });
   };
 
-  const submitEvent = (callback: OnSubmit<any>) => async (
-    e?: React.BaseSyntheticEvent,
-  ): Promise<void> => {
+  const asyncValidation: AsyncValidationFunc = async (item, v, otherValues) => {
+    if (item.asyncValidation && typeof item.asyncValidation === 'function') {
+      const errorString = await item.asyncValidation(v, otherValues);
+      if (errorString) {
+        setFormArray((ps) =>
+          ps.map((el) =>
+            el.name === item.name ? { ...el, error: errorString } : el,
+          ),
+        );
+      }
+    }
+  };
+
+  const submitEvent: OnSubmit<T> = (callback) => async (e) => {
     if (e) {
       e.preventDefault();
       e.persist();

@@ -1,6 +1,6 @@
 {
   "name": "hook-easy-form",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "main": "build/index.umd.js",
   "types": "build/declaration/index.d.ts",
   "homepage": "https://master.d3drll2gk0brg3.amplifyapp.com",
