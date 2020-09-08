@@ -195,6 +195,7 @@ const FormComponent = () => {
 | touched | `boolean` | false | false | The value indicates whether it has been changed before |
 | validate | `object of rules` | undefined | false | Object with functions for validate, function receive two arguments, current value and object with otherValues |
 | options | `object` | undefined | false | Object for rest user properties, it can be - type, placeholder, label, some options etc |
+| asyncValidation (beta) | `function` | undefined | false | Function fired each time when triggered `updateEvent`, receive value, and other values, should return string for error |
 
 
 * __resetAfterSubmit__
@@ -220,10 +221,10 @@ const FormComponent = () => {
   updateDefaultValues // dynamically set default values
   updateFormArray // dynamically set form array
   submitEvent // takes a callback as a param, return to callback formatted object
-  setErrorManually, // takes a name and error string as a params, and immediately set error for current name
-  setValueManually, // takes a name and value as a params, and immediately set value for current name
-  pristine, // true when the current form values are the same as the initialValues, false otherwise.
-  valid, // true when the form is valid (has no validation errors), false otherwise.
+  setErrorManually // takes a name and error string as a params, and immediately set error for current name
+  setValueManually // takes a name and value as a params, and immediately set value for current name
+  pristine // true when the current form values are the same as the initialValues, false otherwise.
+  valid // true when the form is valid (has no validation errors), false otherwise.
 ```
 
 ## Contribute
