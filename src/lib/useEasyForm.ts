@@ -11,9 +11,13 @@ import {
   EasyFormTypes,
   FormArray,
   OnSubmit,
-  DefaultValues,
   AsyncValidationFunc,
   HookType,
+  SetValueManually,
+  SetErrorManually,
+  UpdateEvent,
+  UpdateFormArray,
+  UpdateDefaultValues,
 } from './types';
 
 export const useEasyForm = <T>({
@@ -42,19 +46,19 @@ export const useEasyForm = <T>({
     setFormArray(setDefaultValues(initialForm, df.current));
   };
 
-  const updateDefaultValues = (v: DefaultValues) => {
+  const updateDefaultValues: UpdateDefaultValues = (v) => {
     if (!v || Object.keys(v).length === 0) return;
     df.current = v;
     setFormArray(setDefaultValues(initialForm, v));
   };
 
-  const updateFormArray = (array: FormArray) => {
+  const updateFormArray: UpdateFormArray = (array) => {
     if (!array || !Array.isArray(array)) return;
 
     setFormArray(array);
   };
 
-  const updateEvent = (e?: any) => {
+  const updateEvent: UpdateEvent = (e) => {
     if (!e || !e.target) return;
 
     const { value, type, checked, name } = e.target;
@@ -79,7 +83,7 @@ export const useEasyForm = <T>({
     );
   };
 
-  const setErrorManually = (name?: string, error?: string) => {
+  const setErrorManually: SetErrorManually = (name, error) => {
     setFormArray(
       formArray.map((el) =>
         el.name === name
@@ -93,7 +97,7 @@ export const useEasyForm = <T>({
     );
   };
 
-  const setValueManually = (name?: string, value?: any) => {
+  const setValueManually: SetValueManually = (name, value) => {
     setFormArray((ps) => {
       const otherValues = getOtherValues(ps, name);
 

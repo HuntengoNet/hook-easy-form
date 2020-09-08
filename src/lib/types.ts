@@ -26,17 +26,28 @@ export type OnSubmit<T> = (
   event?: React.BaseSyntheticEvent,
 ) => ((event: React.FormEvent<HTMLFormElement>) => void) | undefined;
 
-export type AsyncValidationFunc = (item: Item, v: any, p: OTHER_VALUES) => void;
+export type AsyncValidationFunc = (
+  item: Item,
+  v: any,
+  p: OTHER_VALUES,
+) => Promise<void>;
+
+export type ResetEvent = () => void;
+export type UpdateEvent = (e?: any) => void;
+export type SetErrorManually = (name?: string, error?: string) => void;
+export type SetValueManually = (name?: string, value?: string) => void;
+export type UpdateDefaultValues = (v: DefaultValues) => void;
+export type UpdateFormArray = (array: FormArray) => void;
 
 export type HookType<T> = {
   formArray: Item[];
   formObject: FormObject;
-  resetEvent: () => void;
-  updateEvent: (e?: any) => void;
-  setErrorManually: (name?: string, error?: string) => void;
-  setValueManually: (name?: string, value?: any) => void;
-  updateDefaultValues: (v: DefaultValues) => void;
-  updateFormArray: (array: FormArray) => void;
+  resetEvent: ResetEvent;
+  updateEvent: UpdateEvent;
+  setErrorManually: SetErrorManually;
+  setValueManually: SetValueManually;
+  updateDefaultValues: UpdateDefaultValues;
+  updateFormArray: UpdateFormArray;
   submitEvent: OnSubmit<T>;
   pristine: boolean;
   valid: boolean;
