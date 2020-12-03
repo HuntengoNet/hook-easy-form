@@ -1,5 +1,6 @@
 ## hook-easy-form
-Simple way to manage your form with custom hook
+Simple way to manage your form with custom hook.
+Please visit [documentation](https://hook-forms-documentation.leonskottkenedi.vercel.app) for get more information
 
 ## Installation
 
