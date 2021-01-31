@@ -196,7 +196,6 @@ const FormComponent = () => {
 | touched | `boolean` | false | false | The value indicates whether it has been changed before |
 | validate | `object of rules` | undefined | false | Object with functions for validate, function receive two arguments, current value and object with otherValues |
 | options | `object` | undefined | false | Object for rest user properties, it can be - type, placeholder, label, some options etc |
-| asyncValidation (beta) | `function` | undefined | false | Function fired each time when triggered `updateEvent`, receive value, and other values, should return string for error |
 
 
 * __resetAfterSubmit__

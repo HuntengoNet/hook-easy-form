@@ -11,7 +11,6 @@ import {
   EasyFormTypes,
   FormArray,
   OnSubmit,
-  AsyncValidationFunc,
   HookType,
   SetValueManually,
   SetErrorManually,
@@ -60,27 +59,23 @@ export const useEasyForm = <T>({
 
   const updateEvent: UpdateEvent = (e) => {
     if (!e || !e.target) return;
-
     const { value, type, checked, name } = e.target;
+    const v = type === 'checkbox' ? checked : value;
 
-    const otherValues = getOtherValues(formArray, name);
-    setFormArray(
-      formArray.map((el) => {
+    setFormArray((ps: FormArray) => {
+      const newForm = ps.map((el) => {
         if (el.name === name) {
-          const v = type === 'checkbox' ? checked : value;
-
-          asyncValidation(el, v, otherValues);
-
-          return {
-            ...el,
-            value: v,
-            touched: true,
-            error: validator(v, otherValues, el.validate),
-          };
+          return { ...el, value: v, touched: true };
         }
         return el;
-      }),
-    );
+      });
+
+      return newForm.map((el) => {
+        const otherValues = getOtherValues(newForm, el.name);
+        const error = validator(el.value, otherValues, el.validate);
+        return { ...el, error };
+      });
+    });
   };
 
   const setErrorManually: SetErrorManually = (name, error) => {
@@ -98,33 +93,20 @@ export const useEasyForm = <T>({
   };
 
   const setValueManually: SetValueManually = (name, value) => {
-    setFormArray((ps) => {
-      const otherValues = getOtherValues(ps, name);
+    setFormArray((ps: FormArray) => {
+      const newForm = ps.map((el) => {
+        if (el.name === name) {
+          return { ...el, value, touched: true };
+        }
+        return el;
+      });
 
-      return ps.map((el) =>
-        el.name === name
-          ? {
-              ...el,
-              touched: true,
-              value,
-              error: validator(value, otherValues, el.validate),
-            }
-          : el,
-      );
+      return newForm.map((el) => {
+        const otherValues = getOtherValues(newForm, el.name);
+        const error = validator(el.value, otherValues, el.validate);
+        return { ...el, error };
+      });
     });
-  };
-
-  const asyncValidation: AsyncValidationFunc = async (item, v, otherValues) => {
-    if (item.asyncValidation && typeof item.asyncValidation === 'function') {
-      const errorString = await item.asyncValidation(v, otherValues);
-      if (errorString) {
-        setFormArray((ps) =>
-          ps.map((el) =>
-            el.name === item.name ? { ...el, error: errorString } : el,
-          ),
-        );
-      }
-    }
   };
 
   const submitEvent: OnSubmit<T> = (callback) => async (e) => {
@@ -149,7 +131,7 @@ export const useEasyForm = <T>({
       );
     }
 
-    const data = getOutputObject(formArray);
+    const data = getOutputObject<T>(formArray);
     await callback(data, e);
     if (resetAfterSubmit) resetEvent();
   };

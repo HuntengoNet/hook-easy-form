@@ -1,7 +1,10 @@
 import { FormArray, OTHER_VALUES } from '../types';
 
-export const getOutputObject = (f: FormArray): any => {
-  return f.reduce((acc, elem) => ({ ...acc, [elem.name]: elem.value }), {});
+export const getOutputObject = <T>(f: FormArray): T => {
+  return f.reduce(
+    (acc, elem) => ({ ...acc, [elem.name]: elem.value }),
+    {} as T,
+  );
 };
 
 export const getOtherValues = (

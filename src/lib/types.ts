@@ -26,12 +26,6 @@ export type OnSubmit<T> = (
   event?: React.BaseSyntheticEvent,
 ) => ((event: React.FormEvent<HTMLFormElement>) => void) | undefined;
 
-export type AsyncValidationFunc = (
-  item: Item,
-  v: any,
-  p: OTHER_VALUES,
-) => Promise<void>;
-
 export type ResetEvent = () => void;
 export type UpdateEvent = (e?: any) => void;
 export type SetErrorManually = (name?: string, error?: string) => void;

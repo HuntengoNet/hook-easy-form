@@ -223,8 +223,24 @@ describe('useEasyForm()', () => {
       result.current.setValueManually();
     });
 
-    expect(result.current.formArray).toEqual(mockArray);
-    expect(result.current.formObject).toEqual(mockObject);
+    const array = [
+      {
+        name: 'FN',
+        value: 'John',
+        error: '',
+      },
+    ];
+
+    const object = {
+      FN: {
+        name: 'FN',
+        value: 'John',
+        error: '',
+      },
+    };
+
+    expect(result.current.formArray).toEqual(array);
+    expect(result.current.formObject).toEqual(object);
   });
 
   it('valid property should be true', () => {
