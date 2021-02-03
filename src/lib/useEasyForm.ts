@@ -115,8 +115,6 @@ export const useEasyForm = <T>({
       e.persist();
     }
 
-    if (!checkFormValid(formArray)) return;
-
     const otherValues = getOtherValues(formArray);
     const hasAnyErrorInForm = hasAnyErrorsInForm(formArray, otherValues);
     if (hasAnyErrorInForm) {
