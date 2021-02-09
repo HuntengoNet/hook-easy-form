@@ -79,16 +79,8 @@ export const useEasyForm = <T>({
   };
 
   const setErrorManually: SetErrorManually = (name, error) => {
-    setFormArray(
-      formArray.map((el) =>
-        el.name === name
-          ? {
-              ...el,
-              touched: true,
-              error,
-            }
-          : el,
-      ),
+    setFormArray((ps: FormArray) =>
+      ps.map((el) => (el.name === name ? { ...el, touched: true, error } : el)),
     );
   };
 
