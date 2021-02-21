@@ -2,7 +2,6 @@
 ![npm](https://img.shields.io/npm/dm/hook-easy-form.svg?label=%E2%8F%ACdownloads&style=for-the-badge)
 ![npm](https://img.shields.io/npm/v/hook-easy-form.svg?style=for-the-badge)
 ![NPM](https://img.shields.io/npm/l/hook-easy-form.svg?label=%F0%9F%93%9Clicense&style=for-the-badge)
-<!-- ![Coveralls github](https://img.shields.io/coveralls/github/hook-easy-form/hook-easy-form.svg?label=%E2%9B%B1coverage&style=for-the-badge) -->
 
 Simple way to manage your form with custom hook.
 Please visit [documentation](https://hook-forms-documentation.leonskottkenedi.vercel.app) for get more information
