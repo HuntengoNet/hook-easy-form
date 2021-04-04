@@ -20,6 +20,14 @@ describe('validator()', () => {
     expect(validator('1333', {}, rules)).toEqual('Invalid');
   });
 
+  it('should return no error with incorrect rules', () => {
+    const rules = {
+      req: 'Required',
+    };
+
+    expect(validator('12', {}, rules as any)).toEqual('');
+  });
+
   it('should return no error', () => {
     expect(validator('12', {}, rules)).toEqual('');
     expect(validator('12', {})).toEqual('');

@@ -1,6 +1,6 @@
 {
   "name": "hook-easy-form",
-  "version": "2.6.6",
+  "version": "2.6.7",
   "main": "build/index.umd.js",
   "types": "build/declaration/index.d.ts",
   "homepage": "https://hook-forms-documentation.leonskottkenedi.vercel.app",
@@ -70,8 +70,16 @@
     "testRegex": ".*\\.test\\.ts$",
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.ts"
-    ]
+      "src/**/*.ts",
+      "!src/index.ts"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": {
+          "warnOnly": true
+        }
+      }
+    }
   },
   "lint-staged": {
     "src/**/*.ts": [
