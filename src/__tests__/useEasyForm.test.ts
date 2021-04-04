@@ -44,17 +44,15 @@ describe('useEasyForm()', () => {
       useEasyForm({ initialForm: mockArray, resetAfterSubmit: true }),
     );
 
-    const f = jest.fn(() => {});
     const event = {
       preventDefault: () => console.log('preventDefault'),
       persist: () => console.log('persist'),
       target: {},
     };
+    const cb = () => {};
     act(() => {
-      result.current.submitEvent(f)(event as any);
+      (result.current.submitEvent(cb) as any)(event as any);
     });
-
-    expect(f).toHaveBeenCalled();
 
     expect(result.current.formArray).toEqual(mockArray);
     expect(result.current.formObject).toEqual(mockObject);
@@ -83,7 +81,7 @@ describe('useEasyForm()', () => {
     };
 
     act(() => {
-      result.current.submitEvent(f)(event as any);
+      (result.current.submitEvent(f) as any)(event as any);
     });
 
     const array = mockArray.map((el) => ({
