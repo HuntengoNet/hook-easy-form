@@ -233,7 +233,7 @@ const FormComponent = () => {
 
 ## Contribute
 
-1. Fork it: `git clone https://github.com/softonic/axios-retry.git`
+1. Fork it: `git clone https://github.com/hook-easy-form/hook-easy-form.git`
 2. Create your feature branch: `git checkout -b feature/my-new-feature`
 3. Commit your changes: `git commit -am 'Added some feature'`
 4. Check the build: `npm run build`
