@@ -45,7 +45,7 @@ const form = [
 ]
 
 const FormComponent = () => {
-  const { formArray, updateEvent, resetEvent, submitEvent, pristine } = easyHook({ initialForm: form, });
+  const { formArray, updateEvent, resetEvent, submitEvent, pristine } = easyHook({ initialForm: form });
   const submit = (v) => console.log(v);
 
   return <form onSubmit={submitEvent(submit)}>
@@ -63,7 +63,7 @@ const FormComponent = () => {
 }
 ```
 
-Simple form with validation and with out tag <form>
+Simple form with validation and without tag <form>
 
 ```jsx
 import React from 'react';
