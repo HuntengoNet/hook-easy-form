@@ -110,7 +110,7 @@ export const useEasyForm = <T>({
     const otherValues = getOtherValues(formArray);
     const hasAnyErrorInForm = hasAnyErrorsInForm(formArray, otherValues);
     if (hasAnyErrorInForm) {
-      return setFormArray(
+      setFormArray(
         formArray.map((el) => ({
           ...el,
           touched: true,
@@ -119,6 +119,8 @@ export const useEasyForm = <T>({
             : validator(el.value, otherValues, el.validate),
         })),
       );
+
+      return {};
     }
 
     const data = getOutputObject<T>(formArray);
